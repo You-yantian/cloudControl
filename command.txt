@@ -1,0 +1,27 @@
+
+##phase 1
+#create nova instances on private network
+nova boot --image $(nova image-list | awk '/ cirros-.*-x86_64-uec / {print $2}') --flavor 1 --nic net-id=$(openstack network list | awk '/ private / {print $2}') node1
+nova boot --image $(nova image-list | awk '/ cirros-.*-x86_64-uec / {print $2}') --flavor 1 --nic net-id=$(openstack network list | awk '/ private / {print $2}') node2
+nova list # should show the nova instances just created
+
+#add secgroup rules to allow ssh etc..
+openstack security group rule create default --protocol icmp
+openstack security group rule create default --protocol tcp --dst-port 22:22
+openstack security group rule create default --protocol tcp --dst-port 80:80
+
+#Set up a simple web server on each of these instances. ssh into each instance (username ‘cirros’, password ‘cubswin:)’) and run
+MYIP=$(ifconfig eth0|grep 'inet addr'|awk -F: '{print $2}'| awk '{print $1}')
+while true; do echo -e "HTTP/1.0 200 OK\r\n\r\nWelcome to $MYIP" | sudo nc -l -p 80 ; done&
+
+
+##phase 2
+neutron lbaas-loadbalancer-create --name lb1 private-subnet
+neutron lbaas-loadbalancer-show lb1  # Wait for the provisioning_status to be ACTIVE.
+neutron lbaas-listener-create --loadbalancer lb1 --protocol HTTP --protocol-port 80 --name listener1
+sleep 10  # Sleep since LBaaS actions can take a few seconds depending on the environment.
+neutron lbaas-pool-create --lb-algorithm ROUND_ROBIN --listener listener1 --protocol HTTP --name pool1
+sleep 10
+neutron lbaas-member-create  --subnet private-subnet --address 10.0.0.3 --protocol-port 80 pool1
+sleep 10
+neutron lbaas-member-create  --subnet private-subnet --address 10.0.0.5 --protocol-port 80 pool1
