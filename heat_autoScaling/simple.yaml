@@ -1,27 +1,6 @@
 heat_template_version: 2014-10-16  
 description: A simple auto scaling group.  
 resources:  
-  server:
-    type: OS::Nova::Server
-    properties:
-      block_device_mapping:
-        - device_name: vda
-          delete_on_termination: true
-          volume_id: { get_resource: volume }
-      flavor: m1.tiny
-      networks:
-        - network: test_internal_net
-      user_data_format: RAW
-      user_data: |
-        #!/bin/sh
-        while [ 1 ] ; do echo $((13**99)) 1>/dev/null 2>&1; done
-
-  volume:
-    type: OS::Cinder::Volume
-    properties:
-      image: 'Cirros 0.3.3'
-      size: 1
-      
   group:
     type: OS::Heat::AutoScalingGroup
     properties:
@@ -29,8 +8,9 @@ resources:
       desired_capacity: 2
       max_size: 5
       min_size: 1
-      resource:{ get_resource: server }
-       
+      resource:
+        type: OS::Nova::Server::Cirros
+
   scaleup_policy:
     type: OS::Heat::ScalingPolicy
     properties:
