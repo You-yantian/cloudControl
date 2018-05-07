@@ -8,7 +8,7 @@ resources:
         - device_name: vda
           delete_on_termination: true
           volume_id: { get_resource: volume }
-      flavor: m1.nano
+      flavor: m1.tiny
       networks:
         - network: test_internal_net
       user_data_format: RAW
