@@ -30,3 +30,7 @@ resources:
       alarm_actions:
         - {get_attr: [scaleup_policy, alarm_url]}
       comparison_operator: gt
+      
+outputs:
+ scale_up_url:
+  value: {get_attr: [scaleup_policy, alarm_url]}
