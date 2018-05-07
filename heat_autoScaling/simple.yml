@@ -1,7 +1,7 @@
 heat_template_version: 2014-10-16  
 description: A simple auto scaling group.  
 resources:  
-   server:
+  server:
     type: OS::Nova::Server
     properties:
       block_device_mapping:
