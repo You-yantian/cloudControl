@@ -9,7 +9,7 @@ resources:
         - device_name: vda
           delete_on_termination: true
           volume_id: { get_resource: volume }
-      flavor: m1.micro
+      flavor: m1.small
       key_name: private
       networks:
         - port: { get_resource: port }
