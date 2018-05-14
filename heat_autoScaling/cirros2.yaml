@@ -35,5 +35,5 @@ resources:
   volume:
     type: OS::Cinder::Volume
     properties:
-      image: 'Cirros 0.3.3'
+      image: 'CentOS'
       size: 1
