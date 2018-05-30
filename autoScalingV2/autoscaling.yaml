@@ -124,14 +124,12 @@ resources:
       resource_type: instance
       comparison_operator: gt
       alarm_actions:
-        - str_replace:
-            template: trust+url
-            params:
-              url: {get_attr: [web_server_scaleup_policy, signal_url]}
-      query:
-        list_join:
-          - ''
-          - - {'=': {server_group: {get_param: "OS::stack_id"}}}
+        - {get_attr: [web_server_scaleup_policy, signal_url_url]}
+      resource_constraint:
+        str_replace:
+          template: 'server_group=stack_id'
+          params:
+            stack_id: {get_param: "OS::stack_id"}
   cpu_alarm_low:
     type: OS::Ceilometer::GnocchiResourcesAlarm
     properties:
@@ -144,14 +142,12 @@ resources:
       resource_type: instance
       comparison_operator: lt
       alarm_actions:
-        - str_replace:
-            template: trust+url
-            params:
-              url: {get_attr: [web_server_scaledown_policy, signal_url]}
-      query:
-        list_join:
-          - ''
-          - - {'=': {server_group: {get_param: "OS::stack_id"}}}
+        - {get_attr: [web_server_scaledown_policy, signal_url_url]}
+      resource_constraint:
+        str_replace:
+          template: 'server_group=stack_id'
+          params:
+            stack_id: {get_param: "OS::stack_id"}
   # assign a floating ip address to the load balancer
   # pool
 
