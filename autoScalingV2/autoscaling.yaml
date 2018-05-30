@@ -77,7 +77,6 @@ resources:
           image: {get_param: image}
           key_name: {get_param: key}
           network: {get_param: network}
-          subnet: {get_param: subnet_id}
           metadata: {"metering.server_group": {get_param: "OS::stack_id"}}
           user_data:
             str_replace:
