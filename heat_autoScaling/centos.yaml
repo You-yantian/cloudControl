@@ -2,7 +2,7 @@ heat_template_version: 2014-10-16
 description: A simple server.  
 
 parameters:
-  port:
+  port_web:
     type: number
     description: The port to reply to requests on
     default: 8080
@@ -28,7 +28,7 @@ resources:
             Response="HTTP/1.1 200 OK\r\nContent-Length: ${#Body}\r\n\r\n$Body"
             while true ; do echo -e $Response | nc -llp %PORT%; done
           params:
-            "%PORT%": {get_param: port}
+            "%PORT%": {get_param: port_web}
 
   port:
     type: OS::Neutron::Port
