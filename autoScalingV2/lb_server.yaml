@@ -18,10 +18,7 @@ parameters:
   network:
     type: string
     description: Network used by the server
-  subnet:
-    type: string
-    description: Subnet used by the server
-
+    
 resources:
   server:
     type: OS::Nova::Server
