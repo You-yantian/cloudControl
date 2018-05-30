@@ -33,7 +33,7 @@ resources:
   port:
     type: OS::Neutron::Port
     properties:
-      network: test_internal_net
+      network: stackServer_net
       security_groups:
         - default
 
