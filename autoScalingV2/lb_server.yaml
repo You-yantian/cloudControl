@@ -1,4 +1,4 @@
-heat_template_version: 2016-10-14
+heat_template_version: 2016-04-08
 description: A load-balancer server
 parameters:
   image:
