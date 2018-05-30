@@ -115,7 +115,7 @@ resources:
       cooldown: 60
       scaling_adjustment: -1
   cpu_alarm_high:
-    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
+    type: OS::Ceilometer::GnocchiResourcesAlarm
     properties:
       description: Scale up if CPU > 80%
       metric: cpu_util
@@ -135,7 +135,7 @@ resources:
           - ''
           - - {'=': {server_group: {get_param: "OS::stack_id"}}}
   cpu_alarm_low:
-    type: OS::Aodh::GnocchiAggregationByResourcesAlarm
+    type: OS::Ceilometer::GnocchiResourcesAlarm
     properties:
       description: Scale down if CPU < 15% for 5 minutes
       metric: cpu_util
