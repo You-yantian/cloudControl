@@ -1,24 +1,25 @@
-heat_template_version: 2016-04-08
+heat_template_version: 2016-04-08ima
 description: AutoScaling Wordpress
 parameters:
   image:
     type: string
-    description: Image used for servers
+    default: d5be4330-6cd3-48df-9b45-65816798cb99
   key:
     type: string
     description: SSH key to connect to the servers
+    default: private
   flavor:
     type: string
     description: flavor used by the web servers
+    default: m1.small
   database_flavor:
     type: string
     description: flavor used by the db server
+    default: m1.small
   network:
     type: string
     description: Network used by the server
-  subnet_id:
-    type: string
-    description: subnet on which the load balancer will be located
+    default: test_internal_net
   database_name:
     type: string
     description: Name of the wordpress DB
