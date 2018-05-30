@@ -1,0 +1,55 @@
+heat_template_version: 2014-10-16  
+description: A simple server.  
+
+parameters:
+  port:
+    type: number
+    description: The port to reply to requests on
+    default: 8080
+    
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      block_device_mapping:
+        - device_name: vda
+          delete_on_termination: true
+          volume_id: { get_resource: volume }
+      flavor: m1.small
+      key_name: private
+      networks:
+        - port: { get_resource: port }
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #! /bin/sh -v
+            Body=$(hostname)
+            Response="HTTP/1.1 200 OK\r\nContent-Length: ${#Body}\r\n\r\n$Body"
+            while true ; do echo -e $Response | nc -llp %PORT%; done
+          params:
+            "%PORT%": {get_param: port}
+
+  port:
+    type: OS::Neutron::Port
+    properties:
+      network: test_internal_net
+      security_groups:
+        - default
+
+  floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: admin_floating_net
+
+  floating_ip_assoc:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: floating_ip }
+      port_id: { get_resource: port }
+
+  volume:
+    type: OS::Cinder::Volume
+    properties:
+      image: 'CentOS'
+      size: 1
