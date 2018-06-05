@@ -9,8 +9,44 @@ resources:
       max_size: 4
       min_size: 1
       resource:
-        my_web_server{type: OS::Nova::Server::Cirros}
+        my_web_server:
+           type: OS::Nova::Server
+           properties:
+            name: webServer
+            flavor: m1.small
+            key_name: private
+            image: CentOS
+            networks:
+                - port: { get_resource: port }
+            user_data_format: RAW
+            user_data:
+                str_replace:
+                template: |
+                    #! /bin/sh -v
+                    Body=$(hostname)
+                    Response="HTTP/1.1 200 OK\r\nContent-Length: ${#Body}\r\n\r\n$Body"
+                    while true ; do echo -e $Response | nc -llp %PORT%; done
+                params:
+                    "%PORT%": {get_param: port_web}           
+           
+  port:
+    type: OS::Neutron::Port
+    properties:
+      network: stackServer_net
+      security_groups:
+        - default
 
+  floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: admin_floating_net
+
+  floating_ip_assoc:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: floating_ip }
+      port_id: { get_resource: port }
+      
   scaleup_policy:
     type: OS::Heat::ScalingPolicy
     properties:
