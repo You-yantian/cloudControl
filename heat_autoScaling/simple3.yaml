@@ -1,5 +1,10 @@
 heat_template_version: 2014-10-16
 description: Example auto scale group, policy and alarm
+parameters:
+  port_web:
+    type: number
+    description: The port to reply to requests on
+    default: 8080
 resources:
   scaleup_group:
     type: OS::Heat::AutoScalingGroup
