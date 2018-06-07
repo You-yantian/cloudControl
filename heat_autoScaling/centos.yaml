@@ -11,6 +11,7 @@ resources:
   server:
     type: OS::Nova::Server
     properties:
+      name: webServer
       flavor: m1.small     
       key_name: private
       image: CentOS
