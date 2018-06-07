@@ -8,8 +8,8 @@ resources:
       desired_capacity: 1
       max_size: 4
       min_size: 1
-      resources:
-        my_web_server:{type: OS::Nova::Server::Cirros}
+      resource:
+        type: OS::Nova::Server::Cirros
 
   scaleup_policy:
     type: OS::Heat::ScalingPolicy
