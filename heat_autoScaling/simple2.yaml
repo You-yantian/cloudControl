@@ -9,7 +9,7 @@ resources:
       max_size: 4
       min_size: 1
       resource:
-        type: OS::Nova::Server::Cirros
+        my_web_server:{type: OS::Nova::Server::Cirros}
 
   scaleup_policy:
     type: OS::Heat::ScalingPolicy
