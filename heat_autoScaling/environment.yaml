@@ -1,2 +1,2 @@
 resource_registry:  
-    "OS::Nova::Server::Cirros": "centos.yaml"
+    "OS::Nova::Server::Cirros": "cirros2.yaml"
