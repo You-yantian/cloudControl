@@ -16,7 +16,7 @@ resources:
             #! /bin/sh -v
             sudo yum -y install httpd wordpress
             sudo systemctl enable httpd.service
-            sudo emctl start httpd.service
+            sudo systemctl start httpd.service
             sudo setsebool -P httpd_can_network_connect_db=1
 
   port:
