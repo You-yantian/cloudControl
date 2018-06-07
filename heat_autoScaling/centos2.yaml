@@ -1,11 +1,5 @@
 heat_template_version: 2014-10-16  
 description: A simple server.  
-
-parameters:
-  port_web:
-    type: number
-    description: The port to reply to requests on
-    default: 8080
     
 resources:
   server:
@@ -22,11 +16,10 @@ resources:
         str_replace:
           template: |
             #! /bin/sh -v
-            Body=$(hostname)
-            Response="HTTP/1.1 200 OK\r\nContent-Length: ${#Body}\r\n\r\n$Body"
-            while true ; do echo -e $Response | nc -llp %PORT%; done
-          params:
-            "%PORT%": {get_param: port_web}
+            sudo yum -y install httpd wordpress
+            sudo systemctl enable httpd.service
+            sudo emctl start httpd.service
+            sudo setsebool -P httpd_can_network_connect_db=1
 
   port:
     type: OS::Neutron::Port

@@ -6,7 +6,7 @@ resources:
     properties:
       cooldown: 60
       desired_capacity: 1
-      max_size: 4
+      max_size: 5
       min_size: 1
       resource:
         type: OS::Nova::Server::Cirros
@@ -46,7 +46,7 @@ resources:
       statistic: avg
       period: 60
       evaluation_periods: 1
-      threshold: 10
+      threshold: 20
       alarm_actions:
         - {get_attr: [scaledown_policy, alarm_url]}
       comparison_operator: lt
