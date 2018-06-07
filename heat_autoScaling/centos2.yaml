@@ -12,9 +12,7 @@ resources:
       networks:
         - port: { get_resource: port }
       user_data_format: RAW
-      user_data:
-        str_replace:
-          template: |
+      user_data: |
             #! /bin/sh -v
             sudo yum -y install httpd wordpress
             sudo systemctl enable httpd.service
