@@ -1,0 +1,27 @@
+﻿ps -ef | grep python：
+check已有的python server进程，如果出现80端口被占用情况可以说查PID及时关闭
+
+sudo python Httpserver.py 80 &
+启动web server
+
+curl --max-time 20 -d "foo=bar&bin=baz" http://192.168.0.3:80   POST
+curl --max-time 20 http:// 192.168.0.3:80   GET
+
+openstack stack create –t [template.yaml] –e [environmentFile.yaml] [stack name]
+command line to create a heat stack.
+  
+wget http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el7/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
+sudo rpm -Uvh rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
+sudo yum install httperf
+
+httperf --server 100.0.0.10 --port 80 --num-conns 5000 --rate 100
+
+
+如何在linux看到haproxy的数据：
+ssh -i “haproxy.key” -L 8181:127.0.0.1:8181 "username@serverIP"
+
+“haproxy.key”: the ssh key to ssh to the openstack instance
+8181: listen port on the client side;
+"username@serverIP": instacnce username and public Ip address.
+
+Then open the web browser and entering the ip address 127.0.0.1:8181/..., ...is the url of haporxy stats page.
