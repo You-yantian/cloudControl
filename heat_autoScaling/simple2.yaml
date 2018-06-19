@@ -32,7 +32,7 @@ resources:
     properties:
       meter_name: cpu_util
       statistic: avg
-      period: 60
+      period: 600
       evaluation_periods: 1
       threshold: 50
       alarm_actions:
@@ -44,7 +44,7 @@ resources:
     properties:
       meter_name: cpu_util
       statistic: avg
-      period: 60
+      period: 600
       evaluation_periods: 1
       threshold: 20
       alarm_actions:
