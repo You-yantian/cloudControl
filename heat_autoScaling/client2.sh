@@ -2,8 +2,10 @@
 
 for i in {1..10}
 do
-        rate=`expr $i \* 100 + 1000`
+        now=$(date +%c)
+		rate=`expr $i \* 50 + 1000`
         httperf --server 192.168.3.75 --port 80 --num-conns 50000 --rate=${rate}
-        date +%s
+        echo "$now, $rate" >>log.csv
+
 done
 
