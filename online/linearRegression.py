@@ -50,7 +50,8 @@ for num in range(1,100):
 	num_server_predict=round(out_put)
 	if num_server_predict>5:
 		num_server_predict=5
-		
+	print 'now: '+str(num_server_now)+' predict number: '+str(num_server_predict)
+	
 	if num_server_now < num_server_predict:
 		while num_server_now < num_server_predict:
 			os.popen('openstack server create --flavor m1.small --image CentOS \
@@ -66,7 +67,7 @@ for num in range(1,100):
 			command = 'nova delete' + webServer_id
 			os.popen(command, 'w')
 			num_server_now=num_server_now-1
-		
+	print 'After prediction: '+num_server_now
 		
 #openstack ip floating create admin_floating_net 
 
