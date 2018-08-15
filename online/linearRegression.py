@@ -1,9 +1,15 @@
 import os
 import numpy as np
 import time
+import csv
 
-for num in range(1,100):
+print "Start : %s" % time.ctime()
+with open('linear.csv','wb') as csvfile:
+  writer=csv.writer(csvfile, delimiter=',')#, quotechar='|', quoting=csv.QUOTE_MINIMAL)
+  for num in range(1,100):
 	time.sleep(180)
+	time_now = time.ctime()
+	print "Sampling time : %s" % time_now
 	W=np.array(([0.408292999816414],[-0.0110732125517341],
 				 [-0.00145526725265507],[0.000364946362718103],
 				 [0.000327199818502800],[-0.000464942659087122],[0.0813606562838769]))
@@ -67,8 +73,10 @@ for num in range(1,100):
 			command = 'nova delete' + webServer_id
 			os.popen(command, 'w')
 			num_server_now=num_server_now-1
-	print 'After prediction: '+num_server_now
-		
+	print 'After prediction: '+str(num_server_now)
+	
+    writer.writerow([time_now, str(num_server_now)])
+print "End : %s" % time.ctime()	
 #openstack ip floating create admin_floating_net 
 
 
