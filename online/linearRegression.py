@@ -6,7 +6,7 @@ import csv
 print "Start : %s" % time.ctime()
 with open('linear.csv','wb') as csvfile:
   writer=csv.writer(csvfile, delimiter=',')#, quotechar='|', quoting=csv.QUOTE_MINIMAL)
-  for num in range(1,100):
+  for num in range(1,140):
 	time.sleep(180)
 	time_now = time.ctime()
 	print "Sampling time : %s" % time_now
@@ -17,33 +17,33 @@ with open('linear.csv','wb') as csvfile:
 	output = os.popen('ceilometer statistics --meter cpu_util -p 180', 'r')
 	text=output.read()
 	x=text.split('|')
-	cpu_util=float(x[len(x)-7])#7
+	cpu_util=float(x[len(x)-18])#7
 
 	output = os.popen('ceilometer statistics --meter network.incoming.bytes.rate -p 180', 'r')
 	text=output.read()
 	x=text.split('|')
-	networkIncomingRate=float(x[len(x)-7])/1024
+	networkIncomingRate=float(x[len(x)-18])/1024
 
 
 	output = os.popen('ceilometer statistics --meter network.outgoing.bytes.rate -p 180', 'r')
 	text=output.read()
 	x=text.split('|')
-	networkOutgoingRate=float(x[len(x)-7])/1024
+	networkOutgoingRate=float(x[len(x)-18])/1024
 
 	output = os.popen('ceilometer statistics --meter memory.usage -p 180', 'r')
 	text=output.read()
 	x=text.split('|')
-	memoryUsage=float(x[len(x)-7])
+	memoryUsage=float(x[len(x)-18])
 
 	output = os.popen('ceilometer statistics --meter disk.device.write.bytes.rate -p 180', 'r')
 	text=output.read()
 	x=text.split('|')
-	diskWriteBytesRate=float(x[len(x)-7])/1024
+	diskWriteBytesRate=float(x[len(x)-18])/1024
 
 	output = os.popen('ceilometer statistics --meter disk.device.write.requests.rate -p 180', 'r')
 	text=output.read()
 	x=text.split('|')
-	diskWriteRequestsRate=float(x[len(x)-7])
+	diskWriteRequestsRate=float(x[len(x)-18])
 
 	output = os.popen('nova list', 'r')
 	text=output.read()
