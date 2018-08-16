@@ -34,7 +34,7 @@ resources:
       statistic: avg
       period: 180
       evaluation_periods: 1
-      threshold: 50
+      threshold: 60
       alarm_actions:
         - {get_attr: [scaleup_policy, alarm_url]}
       comparison_operator: gt
@@ -46,7 +46,7 @@ resources:
       statistic: avg
       period: 180
       evaluation_periods: 1
-      threshold: 20
+      threshold: 30
       alarm_actions:
         - {get_attr: [scaledown_policy, alarm_url]}
       comparison_operator: lt
