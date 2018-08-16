@@ -4,7 +4,7 @@ resources:
   scaleup_group:
     type: OS::Heat::AutoScalingGroup
     properties:
-      cooldown: 120
+      cooldown: 180
       desired_capacity: 1
       max_size: 5
       min_size: 1
@@ -16,7 +16,7 @@ resources:
     properties:
       adjustment_type: change_in_capacity
       auto_scaling_group_id: { get_resource: scaleup_group }
-      cooldown: 120
+      cooldown: 300
       scaling_adjustment: 1
 
   scaledown_policy:
@@ -24,7 +24,7 @@ resources:
     properties:
       adjustment_type: change_in_capacity
       auto_scaling_group_id: { get_resource: scaleup_group }
-      cooldown: 120
+      cooldown: 300
       scaling_adjustment: -1
 
   cpu_alarm_high:
@@ -32,7 +32,7 @@ resources:
     properties:
       meter_name: cpu_util
       statistic: avg
-      period: 180
+      period: 360
       evaluation_periods: 1
       threshold: 50
       alarm_actions:
@@ -44,7 +44,7 @@ resources:
     properties:
       meter_name: cpu_util
       statistic: avg
-      period: 180
+      period: 360
       evaluation_periods: 1
       threshold: 20
       alarm_actions:
