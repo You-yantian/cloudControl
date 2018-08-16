@@ -75,7 +75,7 @@ with open('linear.csv','wb') as csvfile:
 			num_server_now=num_server_now-1
 	print 'After prediction: '+str(num_server_now)
 	
-    writer.writerow([time_now, str(num_server_now)])
+	writer.writerow([time_now, str(num_server_now)])
 print "End : %s" % time.ctime()	
 #openstack ip floating create admin_floating_net 
 
