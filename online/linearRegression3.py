@@ -10,9 +10,9 @@ with open('linear2.csv','wb') as csvfile:
 	time.sleep(180)
 	time_now = time.ctime()
 	print "Sampling time : %s" % time_now
-	W=np.array(([0.512543893794587],[-0.008924268021535],
-				 [0.009903096340906],[-0.000422625582319927],
-				 [0.000569725888797763],[-0.0317249167219835]))
+	W=np.array(([0.605551388264911],[-0.00495352031311974],
+				 [0.005328950666037],[0.0000497242306728869],
+				 [0.000186516968551362],[0.047749303477055]))
 
 	output = os.popen('ceilometer statistics --meter cpu_util -p 180', 'r')
 	text=output.read()
@@ -48,8 +48,8 @@ with open('linear2.csv','wb') as csvfile:
 	input_x=np.array([1,cpu_util,networkIncomingRate,networkOutgoingRate,diskWriteBytesRate,diskWriteRequestsRate])
 	out_put=np.dot(input_x,W)
 	num_server_predict=round(out_put)
-	if num_server_predict>5:
-		num_server_predict=5
+	if num_server_predict>10:
+		num_server_predict=10
 	elif num_server_predict<1:
 		num_server_predict=1
 		
