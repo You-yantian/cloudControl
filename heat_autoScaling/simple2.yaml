@@ -6,7 +6,7 @@ resources:
     properties:
       cooldown: 180
       desired_capacity: 1
-      max_size: 5
+      max_size: 10
       min_size: 1
       resource:
         type: OS::Nova::Server::Cirros
