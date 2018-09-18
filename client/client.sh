@@ -9,8 +9,8 @@ do
 			rate=`expr $i \* 10 + 300`
 		elif [ $i -le 30 ]
 		then
-			echo "$i<=30"
-			rate=`expr $i \* 50 + 300`
+			echo "$i<=35"
+			rate=`expr $i \* 50 + 500`
 		elif [ $i -le 50 ]
 		then
 			echo "$i<=50"
