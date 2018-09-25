@@ -79,6 +79,6 @@ print "End : %s" % time.ctime()
 
 
 
-#openstack server create --flavor m1.small --image CentOS \
-#			--nic net-id=053c1a03-c4f6-4995-907e-49f435693c3a --security-group default \
-#			--key-name private --user-data mydata.file webServer
+openstack server create --flavor m1.small --image CentOS \
+			--nic net-id=053c1a03-c4f6-4995-907e-49f435693c3a --security-group default \
+			--key-name private --user-data mydata.file webServer

@@ -1,5 +1,7 @@
 import os
 import numpy as np
+import time
+import csv
 
 W1=np.array(([2.78934916,-1.666073695,0.663446406,-0.086863464],
 			[2.424791007,1.624154671,-0.269592933,-2.983723794],
@@ -20,73 +22,79 @@ def  sigmoid(x):
 	
 #def  tanh(x):
 #	return 2*sigmoid(2*x) - 1
-	
-output = os.popen('ceilometer statistics --meter cpu_util -p 180', 'r')
-text=output.read()
-x=text.split('|')
-cpu_util=float(x[len(x)-19])#7
+print "Start : %s" % time.ctime()
+with open('linear1.csv','wb') as csvfile:
+  writer=csv.writer(csvfile, delimiter=',')#, quotechar='|', quoting=csv.QUOTE_MINIMAL)
+  for num in range(1,80):	
+		output = os.popen('ceilometer statistics --meter cpu_util -p 180', 'r')
+		text=output.read()
+		x=text.split('|')
+		cpu_util=float(x[len(x)-19])#7
 
-output = os.popen('ceilometer statistics --meter network.incoming.bytes.rate -p 180', 'r')
-text=output.read()
-x=text.split('|')
-networkIncomingRate=float(x[len(x)-19])
+		output = os.popen('ceilometer statistics --meter network.incoming.bytes.rate -p 180', 'r')
+		text=output.read()
+		x=text.split('|')
+		networkIncomingRate=float(x[len(x)-19])
 
 
-output = os.popen('ceilometer statistics --meter network.outgoing.bytes.rate -p 360', 'r')
-text=output.read()
-x=text.split('|')
-networkOutgoingRate=float(x[len(x)-19])
+		output = os.popen('ceilometer statistics --meter network.outgoing.bytes.rate -p 360', 'r')
+		text=output.read()
+		x=text.split('|')
+		networkOutgoingRate=float(x[len(x)-19])
 
-output = os.popen('ceilometer statistics --meter memory.usage -p 360', 'r')
-text=output.read()
-x=text.split('|')
-memoryUsage=float(x[len(x)-19])
+		output = os.popen('ceilometer statistics --meter memory.usage -p 360', 'r')
+		text=output.read()
+		x=text.split('|')
+		memoryUsage=float(x[len(x)-19])
 
-output = os.popen('ceilometer statistics --meter disk.device.write.bytes.rate -p 360', 'r')
-text=output.read()
-x=text.split('|')
-diskWriteBytesRate=float(x[len(x)-19])*2
+		output = os.popen('ceilometer statistics --meter disk.device.write.bytes.rate -p 360', 'r')
+		text=output.read()
+		x=text.split('|')
+		diskWriteBytesRate=float(x[len(x)-19])*2
 
-output = os.popen('ceilometer statistics --meter disk.device.write.requests.rate -p 360', 'r')
-text=output.read()
-x=text.split('|')
-diskWriteRequestsRate=float(x[len(x)-19])*2
+		output = os.popen('ceilometer statistics --meter disk.device.write.requests.rate -p 360', 'r')
+		text=output.read()
+		x=text.split('|')
+		diskWriteRequestsRate=float(x[len(x)-19])*2
 
-print str(cpu_util)+' '+str(networkIncomingRate)+' '+str(networkOutgoingRate)+' '+str(memoryUsage)+' '+str(diskWriteBytesRate)+' '+str(diskWriteRequestsRate)
-input_x=np.array([1,cpu_util,networkIncomingRate,networkOutgoingRate,memoryUsage,diskWriteBytesRate,diskWriteRequestsRate])
-hidden_layer=np.tanh(2*np.dot(input_x,W1)/3)*1.7159
-input_hidden=np.insert(hidden_layer,0,1,axis=0)
-#input_hidden=[1,hidden_layer]
-out_put=sigmoid(np.dot(input_hidden,W2))
-num_server_predict=np.argmax(out_put)+1;
+		print str(cpu_util)+' '+str(networkIncomingRate)+' '+str(networkOutgoingRate)+' '+str(memoryUsage)+' '+str(diskWriteBytesRate)+' '+str(diskWriteRequestsRate)
+		input_x=np.array([1,cpu_util,networkIncomingRate,networkOutgoingRate,memoryUsage,diskWriteBytesRate,diskWriteRequestsRate])
+		hidden_layer=np.tanh(2*np.dot(input_x,W1)/3)*1.7159
+		input_hidden=np.insert(hidden_layer,0,1,axis=0)
+		#input_hidden=[1,hidden_layer]
+		out_put=sigmoid(np.dot(input_hidden,W2))
+		num_server_predict=np.argmax(out_put)+1;
 
-output = os.popen('nova list', 'r')
-text=output.read()
-x=text.split('\n')
-num_server_now=len(x)-5
-
-if num_server_now < num_server_predict:
-	while num_server_now < num_server_predict:
-		os.popen('openstack server create --flavor m1.small --image CentOS \
-			--nic net-id=053c1a03-c4f6-4995-907e-49f435693c3a --security-group default \
-			--key-name private --user-data mydata.file webServer', 'w')
-		num_server_now=num_server_now+1
-elif num_server_now > num_server_predict:
-	while num_server_now > num_server_predict:
-	    output = os.popen('nova list', 'r')
-		text = output.read()
-		x = text.split('|')
-		webServer_id = x[8]
-		command = 'nova delete' + webServer_id
-		os.popen(command, 'w')
-		num_server_now=num_server_now-1
+		output = os.popen('nova list', 'r')
+		text=output.read()
+		x=text.split('\n')
+		num_server_now=len(x)-5
 		
+		print 'now: '+str(num_server_now)+' predict number: '+str(num_server_predict)
+		if num_server_now < num_server_predict:
+			while num_server_now < num_server_predict:
+				os.popen('openstack server create --flavor m1.small --image CentOS \
+					--nic net-id=053c1a03-c4f6-4995-907e-49f435693c3a --security-group default \
+					--key-name private --user-data mydata.file webServer', 'w')
+				num_server_now=num_server_now+1
+		elif num_server_now > num_server_predict:
+			while num_server_now > num_server_predict:
+				output = os.popen('nova list', 'r')
+				text = output.read()
+				x = text.split('|')
+				webServer_id = x[8]
+				command = 'nova delete' + webServer_id
+				os.popen(command, 'w')
+				num_server_now=num_server_now-1
+		print 'After prediction: '+str(num_server_now)		
 		
+		 writer.writerow([time_now, str(num_server_now)])
+print "End : %s" % time.ctime()	
 #openstack ip floating create admin_floating_net 
 
 
 
 
-openstack server create --flavor m1.small --image CentOS \
-			--nic net-id=053c1a03-c4f6-4995-907e-49f435693c3a --security-group default \
-			--key-name private --user-data mydata.file webServer
+#openstack server create --flavor m1.small --image CentOS \
+#			--nic net-id=053c1a03-c4f6-4995-907e-49f435693c3a --security-group default \
+#			--key-name private --user-data mydata.file webServer
